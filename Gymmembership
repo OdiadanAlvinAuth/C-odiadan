@@ -1,0 +1,253 @@
+Gym Membership
+import { useState, useMemo, useCallback } from 'react';
+
+export default function GymWebsite() {
+  const [selectedPlan, setSelectedPlan] = useState('Basic');
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+
+  const plans = useMemo(() => [
+    { name: 'Basic', price: '$20/mo' },
+    { name: 'Premium', price: '$35/mo' },
+    { name: 'Pro', price: '$50/mo' }
+  ], []);
+
+  const handlePlanChange = useCallback((planName) => {
+    setSelectedPlan(planName);
+  }, []);
+
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const handleSubmit = useCallback((e) => {
+    e.preventDefault();
+    console.log('Signup submitted:', formData);
+    alert(`Thanks for signing up, ${formData.name || 'Guest'}!`);
+  }, [formData]);
+
+  return (
+    <div style={styles.app}>
+      <header style={styles.header}>
+        <h1 style={styles.logo}>🏋️ AUTHENTIC DAN GYM</h1>
+        <p style={styles.tagline}>Achieve Your Fitness Goals with Us</p>
+      </header>
+      <section style={styles.section}>
+        <h2 style={styles.sectionTitle}>💪 Our Classes</h2>
+        <ul style={styles.list}>
+          <li>HIIT Training</li>
+          <li>Yoga & Meditation</li>
+          <li>CrossFit</li>
+          <li>Strength Training</li>
+        </ul>
+      </section>
+      <section style={styles.section}>
+        <h2 style={styles.sectionTitle}>👤 Personal Workout Programs</h2>
+        <p>We provide 1-on-1 personal training, custom workout plans, and ongoing fitness assessments to tailor your journey.</p>
+      </section>
+
+      <section style={styles.section}>
+        <h2 style={styles.sectionTitle}>💳 Membership Plans</h2>
+        <div style={styles.planGrid}>
+          {plans.map((plan) => (
+            <div
+              key={plan.name}
+              role="button"
+              tabIndex={0}
+              onClick={() => handlePlanChange(plan.name)}
+              onKeyDown={(e) => e.key === 'Enter' && handlePlanChange(plan.name)}
+              style={{
+                ...styles.planCard,
+                ...(selectedPlan === plan.name ? styles.selectedCard : {})
+              }}
+            >
+              <h3 style={styles.cardTitle}>{plan.name}</h3>
+              <p style={styles.cardPrice}>{plan.price}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section style={styles.section}>
+        <h2 style={styles.sectionTitle}>📅 Weekly Schedule</h2>
+        <table style={styles.table}>
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Morning</th>
+              <th>Evening</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Monday</td><td>Yoga</td><td>HIIT</td></tr>
+            <tr><td>Tuesday</td><td>Strength</td><td>CrossFit</td></tr>
+            <tr><td>Wednesday</td><td>Cardio</td><td>Boxing</td></tr>
+            <tr><td>Thursday</td><td>Stretch</td><td>HIIT</td></tr>
+            <tr><td>Friday</td><td>CrossFit</td><td>Strength</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      {/* Signup Form */}
+      <section style={styles.section}>
+        <h2 style={styles.sectionTitle}>📝 Sign Up</h2>
+        <form style={styles.form} onSubmit={handleSubmit}>
+          <input
+            style={styles.input}
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleInputChange}
+          />
+          <input
+            style={styles.input}
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+          <input
+            style={styles.input}
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleInputChange}
+          />
+          <button type="submit" style={styles.button}>Join Now</button>
+        </form>
+      </section>
+
+      <footer style={styles.footer}>
+        <p>© 2025 AUTHENTIC DAN Gym. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}
+
+const styles = {
+  app: {
+    fontFamily: `'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif`,
+    background: 'radial-gradient(circle at top, #10161A 0%, #0A0F12 100%)',
+    color: '#f2f2f2',
+    lineHeight: '1.6',
+    paddingBottom: '4rem',
+  },
+  header: {
+    padding: '3rem 2rem',
+    textAlign: 'center',
+    background: 'linear-gradient(to right, #0f2027, #203a43, #2c5364)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.6)',
+  },
+  logo: {
+    fontSize: '3rem',
+    fontWeight: 'bold',
+    margin: 0,
+    letterSpacing: '1px',
+  },
+  tagline: {
+    fontSize: '1.3rem',
+    color: '#c2c2c2',
+    marginTop: '0.5rem',
+  },
+  section: {
+    padding: '3.5rem 2rem',
+    maxWidth: '1100px',
+    margin: '0 auto',
+    borderBottom: '1px solid #1d1d1d',
+  },
+  sectionTitle: {
+    fontSize: '2rem',
+    marginBottom: '1.5rem',
+    color: '#00ffc3',
+    fontWeight: '600',
+    borderLeft: '4px solid #00ffc3',
+    paddingLeft: '1rem',
+  },
+  list: {
+    listStyle: 'none',
+    paddingLeft: '0',
+    fontSize: '1.1rem',
+  },
+  planGrid: {
+    display: 'flex',
+    gap: '2rem',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: '2rem',
+  },
+  planCard: {
+    background: 'rgba(255, 255, 255, 0.05)',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    padding: '2rem',
+    borderRadius: '16px',
+    width: '220px',
+    textAlign: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
+    border: '1px solid transparent',
+    outline: 'none',
+  },
+  selectedCard: {
+    border: '1px solid #00ffc3',
+    boxShadow: '0 12px 32px rgba(0, 255, 195, 0.3)',
+    transform: 'translateY(-5px)',
+  },
+  cardTitle: {
+    marginBottom: '0.5rem',
+    fontSize: '1.4rem',
+    color: '#fff',
+  },
+  cardPrice: {
+    fontSize: '1.1rem',
+    color: '#aaa',
+  },
+  table: {
+    width: '100%',
+    maxWidth: '800px',
+    margin: '2rem auto 0',
+    borderCollapse: 'collapse',
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderRadius: '10px',
+    overflow: 'hidden',
+    fontSize: '1rem',
+    textAlign: 'center',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+  },
+  form: {
+    maxWidth: '400px',
+    margin: '2rem auto 0',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+  },
+  input: {
+    padding: '0.9rem 1rem',
+    borderRadius: '8px',
+    border: '1px solid #444',
+    background: '#1a1a1a',
+    color: '#fff',
+    fontSize: '1rem',
+  },
+  button: {
+    padding: '1rem',
+    border: 'none',
+    background: '#00ffc3',
+    color: '#000',
+    fontWeight: 'bold',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    transition: 'background 0.3s ease',
+  },
+  footer: {
+    textAlign: 'center',
+    padding: '3rem 1rem 1rem',
+    background: '#0a0f12',
+    color: '#777',
+    fontSize: '0.9rem',
+  },
+};
